@@ -45,6 +45,30 @@ def run(mode='full'):
         'global_mean_baseline_rmse':float(np.sqrt(mean_squared_error(rating_test.reviews_rating,np.full(len(values),global_mean)))),
         'warm_start_coverage':float(coverage),
         'interpretation':'All held-out pairs are evaluated. Unknown users/items use the training global mean. Warm-start coverage is reported rather than hiding cold-start cases. No test ratings enter the similarity matrix.'}
+    # Evaluate the actual top-K recommendation objective separately from rating RMSE.
+    relevant=rating_test.loc[rating_test.reviews_rating>=4].groupby('reviews_username').id.agg(set)
+    item_popularity=rating_train.groupby('id').reviews_rating.agg(['mean','size']).reindex(items)
+    popularity_order=item_popularity.sort_values(['size','mean'],ascending=False).index.tolist()
+    scores=[];baseline_scores=[]
+    for user, truth in relevant.items():
+        if user not in ui:continue
+        row=matrix.getrow(ui[user]);seen_items={items[i] for i in row.indices}
+        truth=set(truth)&set(items)-seen_items
+        if not truth:continue
+        weights=similarity[row.indices,:]
+        denom=weights.sum(axis=0)
+        values_for_user=np.divide(row.data @ weights,denom,out=np.full(len(items),global_mean),where=denom>0)
+        candidate_indices=[i for i,item in enumerate(items) if item not in seen_items]
+        top=[items[i] for i in sorted(candidate_indices,key=lambda i:values_for_user[i],reverse=True)[:5]]
+        base=[item for item in popularity_order if item not in seen_items][:5]
+        scores.append((len(set(top)&truth)/len(top),len(set(top)&truth)/len(truth)))
+        baseline_scores.append((len(set(base)&truth)/len(base),len(set(base)&truth)/len(truth)))
+    report['ranking_evaluation']={'k':5,'evaluated_warm_users':len(scores),
+        'precision_at_5':float(np.mean([r[0] for r in scores])) if scores else None,
+        'recall_at_5':float(np.mean([r[1] for r in scores])) if scores else None,
+        'popularity_precision_at_5':float(np.mean([r[0] for r in baseline_scores])) if scores else None,
+        'popularity_recall_at_5':float(np.mean([r[1] for r in baseline_scores])) if scores else None,
+        'interpretation':'Relevant means held-out rating >=4. Evaluated on users/items seen in training with a held-out relevant item. Unobserved items are unjudged; this is an offline proxy, not an online engagement claim.'}
     example=rating_train.reviews_username.value_counts().index[0]
     seen=set(rating_train.loc[rating_train.reviews_username==example,'id']);candidates=[item for item in items if item not in seen]
     ranked=sorted(((item,predict_rating(example,item)[0]) for item in candidates),key=lambda p:p[1],reverse=True)[:5]
