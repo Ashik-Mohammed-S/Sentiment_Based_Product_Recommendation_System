@@ -17,9 +17,46 @@ def digest(path):
             value.update(chunk)
     return value.hexdigest()
 
-def ensure_data(directory=None):
+
+def restore_bundled(entry, target, directory):
+    """Reconstruct stored data without contacting any external host."""
+    import gzip, shutil
+    index_path = ROOT / 'dataset' / 'bundled-index.json'
+    if not index_path.exists():
+        return False
+    record = json.loads(index_path.read_text(encoding='utf-8'))['files'].get(entry['filename'])
+    if not record or record['sha256'] != entry['sha256']:
+        return False
+    base = (ROOT / 'dataset').resolve()
+    def safe_path(relative):
+        path = (base / relative).resolve()
+        if not path.is_relative_to(base):
+            raise ValueError('Invalid stored dataset path')
+        return path
+    with tempfile.TemporaryDirectory(dir=directory) as temporary:
+        payload=Path(temporary)/'payload'
+        if record['storage']=='raw':
+            original=safe_path(record['path'])
+            if not original.exists():return False
+            shutil.copyfile(original,payload)
+        else:
+            archive=Path(temporary)/'data.gz'
+            with archive.open('wb') as combined:
+                for part in record['parts']:
+                    path=safe_path(part['path'])
+                    if not path.exists():return False
+                    if digest(path)!=part['sha256']:raise ValueError('Stored dataset part checksum mismatch')
+                    with path.open('rb') as stream:shutil.copyfileobj(stream,combined)
+            with gzip.open(archive,'rb') as stream,payload.open('wb') as out:shutil.copyfileobj(stream,out)
+        if digest(payload)!=entry['sha256']:raise ValueError('Stored dataset payload checksum mismatch')
+        payload.replace(target)
+    return True
+
+def ensure_data(directory=None, allow_network=None):
     directory = Path(directory or os.environ.get("DATA_DIR", ROOT / "dataset"))
     directory.mkdir(parents=True, exist_ok=True)
+    if allow_network is None:
+        allow_network = os.environ.get("DATA_OFFLINE") != "1"
     manifest = json.loads((ROOT / "dataset-sources.json").read_text(encoding="utf-8"))
     for entry in manifest["files"]:
         if Path(entry["filename"]).name != entry["filename"]:
@@ -29,6 +66,10 @@ def ensure_data(directory=None):
             if digest(target) not in [entry["sha256"], *entry.get("compatible_sha256", [])]:
                 raise ValueError(f"{target} differs from the pinned copy. Move it aside to restore the reference dataset.")
             continue
+        if restore_bundled(entry, target, directory):
+            continue
+        if not allow_network:
+            raise FileNotFoundError("Stored reference data is missing for " + entry["filename"])
         print(f"Downloading {entry['filename']} from the recorded public source...", flush=True)
         with tempfile.TemporaryDirectory(dir=directory) as temporary:
             download = Path(temporary) / "download"

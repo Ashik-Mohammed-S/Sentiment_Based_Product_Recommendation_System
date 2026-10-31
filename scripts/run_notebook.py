@@ -2,7 +2,7 @@ import os,sys,json,time,traceback
 from pathlib import Path
 import argparse
 parser = argparse.ArgumentParser(description="Execute this project's notebook against recovered real data.")
-parser.add_argument("--mode", choices=["quick", "full"], default="quick")
+parser.add_argument("--mode", choices=["quick", "full"], default="full")
 args = parser.parse_args()
 os.environ["RUN_MODE"] = args.mode
 root=Path(__file__).resolve().parents[1];os.chdir(root)
@@ -44,7 +44,7 @@ for i,c in enumerate(nb['cells']):
 else:result['status']='passed'
 result['seconds']=round(time.time()-start,2)
 result['boosted_tree_backend'] = shell.user_ns.get('BOOST_BACKEND')
-result['metrics'] = {}
+result['metrics'] = dict(shell.user_ns.get('report', {}).get('metrics', {}))
 for key, value in shell.user_ns.items():
     if key.endswith('_results') and isinstance(value, dict):
         try:

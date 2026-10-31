@@ -18,3 +18,6 @@ E-commerce has revolutionized the way we shop. Companies like Amazon, Flipkart, 
 - **Code**: The code for Sentiment Classification and Recommender Systems is available in the Main.ipynb Jupyter notebook.
 
 - **Product Filtering**: The top 20 products are filtered using the recommender system. For each of these products, the user_sentiment is predicted for all the reviews. The Top 5 products with the highest Positive User Sentiment are then filtered out.
+## Current analysis and local datasets
+
+See [ANALYSIS.md](ANALYSIS.md) for the target-aware workflow and [DATA.md](DATA.md) for the stored reference data. The primary notebook runs the full current analysis; earlier walkthroughs are preserved in historical/.
