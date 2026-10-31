@@ -1,0 +1,13 @@
+# Stable releases verified from PyPI on 2026-11-01.
+imbalanced-learn==0.14.2
+ipykernel==7.4.0
+jupyterlab==4.6.5
+matplotlib==3.11.2
+nbformat==5.11.1
+nltk==3.10.4
+numpy==2.5.4
+pandas==3.1.0
+scikit-learn==1.9.1
+seaborn==0.13.2
+wordcloud==1.9.6
+xgboost==3.4.1
