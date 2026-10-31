@@ -1,5 +1,7 @@
 import unittest
 from unittest.mock import MagicMock
+from urllib.error import HTTPError
+from io import BytesIO
 from scripts.monitor_health import check_site,probe_site,check_local_app
 from scripts.send_failure_email import deliver,build_message
 
@@ -34,5 +36,12 @@ class MonitoringTests(unittest.TestCase):
         with self.assertRaises(RuntimeError):probe_site(MagicMock(return_value=response))
     def test_local_model_is_operational(self):
         self.assertIn('passed',check_local_app())
+    def test_http_401_sign_in_gate_is_expected_but_arbitrary_errors_fail(self):
+        gate=HTTPError('https://example.invalid',401,'Unauthorized',{},BytesIO(b'<title>Sign in required</title>'))
+        self.assertIn('gate reachable',probe_site(MagicMock(side_effect=gate)))
+        denied=HTTPError('https://example.invalid',401,'Unauthorized',{},BytesIO(b'Unknown access error'))
+        with self.assertRaises(RuntimeError):probe_site(MagicMock(side_effect=denied))
+        failed=HTTPError('https://example.invalid',503,'Unavailable',{},BytesIO(b'Server down'))
+        with self.assertRaises(HTTPError):probe_site(MagicMock(side_effect=failed))
 
 if __name__=='__main__':unittest.main()

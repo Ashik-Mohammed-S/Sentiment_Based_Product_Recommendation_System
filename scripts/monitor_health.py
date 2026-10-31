@@ -4,6 +4,7 @@ from pathlib import Path
 import sys
 import time
 from urllib.request import Request, urlopen
+from urllib.error import HTTPError
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
@@ -28,11 +29,20 @@ def check_local_app():
 
 def probe_site(opener=urlopen):
     request=Request(SITE_URL,headers={'User-Agent':'ReviewCompass-Repository-Monitor/1.0'})
-    with opener(request,timeout=20) as response:
-        if response.status!=200:raise RuntimeError('Hosted endpoint did not return HTTP 200')
+    try:
+        response=opener(request,timeout=20)
+    except HTTPError as error:
+        # Sites returns its expected sign-in HTML with HTTP 401. Only a
+        # recognizable gate counts as reachable; arbitrary 401/403 errors do not.
+        if error.code not in (401,403):raise
+        response=error
+    with response:
+        status=response.status
         page=response.read(512_000).decode('utf-8',errors='replace').lower()
-        if 'log in to access' in page or 'continue with chatgpt' in page:
+        gate=('log in to access' in page or 'continue with chatgpt' in page or '<title>sign in required</title>' in page)
+        if status in (200,401,403) and gate:
             return 'Private ChatGPT sign-in gate reachable; authenticated hosted inference is not checked.'
+        if status!=200:raise RuntimeError('Hosted endpoint returned an unexpected access error')
         if 'review compass' in page and 'product discovery' in page:
             return 'Hosted app HTML reachable; authenticated hosted inference is not checked.'
         raise RuntimeError('Hosted response is neither the app page nor the expected private sign-in gate')
@@ -40,7 +50,8 @@ def probe_site(opener=urlopen):
 def check_site(attempts=3,probe=probe_site,sleep=time.sleep):
     for attempt in range(attempts):
         try:return probe()
-        except Exception:
+        except Exception as error:
+            print(f'Hosted probe attempt {attempt+1} failed: {type(error).__name__}',file=sys.stderr)
             if attempt+1==attempts:raise RuntimeError('Hosted reachability check failed after three attempts') from None
             sleep(10)
 
