@@ -29,3 +29,5 @@ the historical trained-model quality. The runner writes results/execution-report
 
 If native XGBoost fails its isolated startup/training probe, the notebook explicitly selects and labels a scikit-learn HistGradientBoosting fallback. Scores from that fallback are not XGBoost results.
 
+
+The tracked review CSV has separately recorded exact LF and Windows-CRLF checksums. Both known Git checkout forms are accepted; downloaded bytes must match the canonical source checksum.

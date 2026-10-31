@@ -26,7 +26,7 @@ def ensure_data(directory=None):
             raise ValueError("Manifest filenames must be plain filenames")
         target = directory / entry["filename"]
         if target.exists():
-            if digest(target) != entry["sha256"]:
+            if digest(target) not in [entry["sha256"], *entry.get("compatible_sha256", [])]:
                 raise ValueError(f"{target} differs from the pinned copy. Move it aside to restore the reference dataset.")
             continue
         print(f"Downloading {entry['filename']} from the recorded public source...", flush=True)
