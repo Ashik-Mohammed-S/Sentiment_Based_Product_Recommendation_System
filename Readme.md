@@ -1,3 +1,7 @@
+# Live recommendation app
+
+[Open Review Compass](https://review-compass-ashik.swoonysnipe19.chatgpt.site) · [Run Flask / API](APP.md) · [Model evaluation](MODEL_CARD.md)
+
 ## Sentiment-Based Product Recommendation
 
 ### Problem Statement

@@ -1,0 +1,526 @@
+{
+  "objective": "Recommend unseen products, judged by held-out positive interactions.",
+  "split": "User/item pairs grouped before fixed 80/20 final split (seed 42); inner 80/20 validation (seed 43) selects ranking configuration by NDCG@5 and rating shrinkage by RMSE. Test is evaluated once after selection.",
+  "train_pairs": 17656,
+  "validation_pairs": 4414,
+  "final_test_pairs": 5518,
+  "selected_config": {
+    "regularization": 1000,
+    "collaborative_weight": 2,
+    "content_weight": 0,
+    "sentiment_power": 1
+  },
+  "validation": {
+    "precision_at_5": 0.11783811215427556,
+    "recall_at_5": 0.5779835913050834,
+    "ndcg_at_5": 0.4717466206036253,
+    "evaluated_users": 3941,
+    "cold_users": 3506,
+    "catalog_coverage": 0.14682539682539683
+  },
+  "ranking": {
+    "precision_at_5": 0.11767365392519522,
+    "recall_at_5": 0.5752123578572407,
+    "ndcg_at_5": 0.4696525779506564,
+    "evaluated_users": 4866,
+    "cold_users": 4205,
+    "catalog_coverage": 0.15234375
+  },
+  "popularity_baseline": {
+    "precision_at_5": 0.11615289765721333,
+    "recall_at_5": 0.5690334292368817,
+    "ndcg_at_5": 0.45644031437118354,
+    "evaluated_users": 4866,
+    "cold_users": 4205,
+    "catalog_coverage": 0.0390625
+  },
+  "rating": {
+    "rmse": 0.7981996658972541,
+    "mae": 0.5439626508263253,
+    "global_mean_baseline_rmse": 0.9326923444801323
+  },
+  "rating_shrinkage": 20,
+  "candidates": [
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0,
+        "content_weight": 0,
+        "sentiment_power": 0
+      },
+      "metrics": {
+        "precision_at_5": 0.1163664044658716,
+        "recall_at_5": 0.5721052186416307,
+        "ndcg_at_5": 0.4574681311483947,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.031746031746031744
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11611266176097437,
+        "recall_at_5": 0.5710902478220418,
+        "ndcg_at_5": 0.45703693522044636,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03571428571428571
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0.05,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11672164425272771,
+        "recall_at_5": 0.5735853844201979,
+        "ndcg_at_5": 0.4581009016669511,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03968253968253968
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0.1,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11743212382643997,
+        "recall_at_5": 0.5767571682314133,
+        "ndcg_at_5": 0.4594207878500411,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.06746031746031746
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0.25,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11753362090839886,
+        "recall_at_5": 0.5769263300346782,
+        "ndcg_at_5": 0.46855643229709615,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.1111111111111111
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0.5,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11768586653133721,
+        "recall_at_5": 0.5773915249936564,
+        "ndcg_at_5": 0.4687974806131044,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.1388888888888889
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 1,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11773661507231667,
+        "recall_at_5": 0.577518396346105,
+        "ndcg_at_5": 0.47078231002402227,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.17063492063492064
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 2,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11753362090839888,
+        "recall_at_5": 0.5766302968789647,
+        "ndcg_at_5": 0.4710173443139136,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.2261904761904762
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0,
+        "content_weight": 0.1,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11717838112154275,
+        "recall_at_5": 0.5756153260593758,
+        "ndcg_at_5": 0.4589686883325676,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03968253968253968
+      }
+    },
+    {
+      "config": {
+        "regularization": 50,
+        "collaborative_weight": 0.25,
+        "content_weight": 0.1,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11753362090839886,
+        "recall_at_5": 0.5769263300346781,
+        "ndcg_at_5": 0.4686795663575577,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.12301587301587301
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0,
+        "content_weight": 0,
+        "sentiment_power": 0
+      },
+      "metrics": {
+        "precision_at_5": 0.1163664044658716,
+        "recall_at_5": 0.5721052186416307,
+        "ndcg_at_5": 0.4574681311483947,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.031746031746031744
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11611266176097437,
+        "recall_at_5": 0.5710902478220418,
+        "ndcg_at_5": 0.45703693522044636,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03571428571428571
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0.05,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11677239279370716,
+        "recall_at_5": 0.5738391271250951,
+        "ndcg_at_5": 0.4582058809151211,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03968253968253968
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0.1,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11743212382643997,
+        "recall_at_5": 0.5767571682314133,
+        "ndcg_at_5": 0.45940966789296445,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.07142857142857142
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0.25,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11763511799035777,
+        "recall_at_5": 0.5772646536412078,
+        "ndcg_at_5": 0.4687006582802912,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.11507936507936507
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0.5,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.1177873636132961,
+        "recall_at_5": 0.5778567199526348,
+        "ndcg_at_5": 0.4690195107165912,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.13095238095238096
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 1,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11783811215427556,
+        "recall_at_5": 0.5778567199526348,
+        "ndcg_at_5": 0.47097483140937046,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.1388888888888889
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 2,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11783811215427556,
+        "recall_at_5": 0.5778567199526348,
+        "ndcg_at_5": 0.4717024022714375,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.17063492063492064
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0,
+        "content_weight": 0.1,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11717838112154275,
+        "recall_at_5": 0.5756153260593758,
+        "ndcg_at_5": 0.4589686883325676,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03968253968253968
+      }
+    },
+    {
+      "config": {
+        "regularization": 200,
+        "collaborative_weight": 0.25,
+        "content_weight": 0.1,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11763511799035777,
+        "recall_at_5": 0.5774338154444726,
+        "ndcg_at_5": 0.46886476855589065,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.12698412698412698
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0,
+        "content_weight": 0,
+        "sentiment_power": 0
+      },
+      "metrics": {
+        "precision_at_5": 0.1163664044658716,
+        "recall_at_5": 0.5721052186416307,
+        "ndcg_at_5": 0.4574681311483947,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.031746031746031744
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11611266176097437,
+        "recall_at_5": 0.5710902478220418,
+        "ndcg_at_5": 0.45703693522044636,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03571428571428571
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0.05,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11677239279370716,
+        "recall_at_5": 0.5738391271250951,
+        "ndcg_at_5": 0.45819762615325593,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03968253968253968
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0.1,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11748287236741942,
+        "recall_at_5": 0.5770109109363106,
+        "ndcg_at_5": 0.45951464714113444,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.06746031746031746
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0.25,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11768586653133721,
+        "recall_at_5": 0.577518396346105,
+        "ndcg_at_5": 0.46885414434056494,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.10714285714285714
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0.5,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.117888860695255,
+        "recall_at_5": 0.5783642053624292,
+        "ndcg_at_5": 0.46917966627878643,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.12301587301587301
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 1,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11778736361329611,
+        "recall_at_5": 0.5778567199526348,
+        "ndcg_at_5": 0.4708612895095472,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.1388888888888889
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 2,
+        "content_weight": 0,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11783811215427556,
+        "recall_at_5": 0.5779835913050834,
+        "ndcg_at_5": 0.4717466206036253,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.14682539682539683
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0,
+        "content_weight": 0.1,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11717838112154275,
+        "recall_at_5": 0.5756153260593758,
+        "ndcg_at_5": 0.4589686883325676,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.03968253968253968
+      }
+    },
+    {
+      "config": {
+        "regularization": 1000,
+        "collaborative_weight": 0.25,
+        "content_weight": 0.1,
+        "sentiment_power": 1
+      },
+      "metrics": {
+        "precision_at_5": 0.11763511799035777,
+        "recall_at_5": 0.5774338154444726,
+        "ndcg_at_5": 0.4688732347277064,
+        "evaluated_users": 3941,
+        "cold_users": 3506,
+        "catalog_coverage": 0.12301587301587301
+      }
+    }
+  ],
+  "limitations": "Random pair holdout, not chronological. Relevant means observed rating >=4; unobserved products are unjudged. Cold users and unseen relevant items remain in evaluation. Offline results are not causal or online engagement evidence."
+}
