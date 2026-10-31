@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "files": {
+    "sample30.csv": {
+      "sha256": "e9813924b90988b3cf3b889a3221f335bc6b6fb9a021eee42fe39c64585d0fc0",
+      "uncompressed_bytes": 18650123,
+      "storage": "raw",
+      "path": "sample30.csv"
+    }
+  }
+}
