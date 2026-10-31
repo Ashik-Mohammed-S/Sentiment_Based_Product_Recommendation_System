@@ -1,0 +1,32 @@
+{
+  "source_repository": "Ashik-Mohammed-S/Sentiment_Based_Product_Recommendation_System",
+  "commit": "6c582130b7c5bc77b9a1535585adde6a7c9008f7",
+  "license": null,
+  "note": "This dataset was already present in your own repository; no replacement data was needed.",
+  "files": [
+    {
+      "filename": "sample30.csv",
+      "url": "https://raw.githubusercontent.com/Ashik-Mohammed-S/Sentiment_Based_Product_Recommendation_System/6c582130b7c5bc77b9a1535585adde6a7c9008f7/dataset/sample30.csv",
+      "sha256": "97cd0c1e4d372f1750a9b157e83962507ff74ebab43cf9e3ead6c220eb5fe29c",
+      "bytes": 18680124,
+      "rows": 30000,
+      "columns": [
+        "id",
+        "brand",
+        "categories",
+        "manufacturer",
+        "name",
+        "reviews_date",
+        "reviews_didPurchase",
+        "reviews_doRecommend",
+        "reviews_rating",
+        "reviews_text",
+        "reviews_title",
+        "reviews_userCity",
+        "reviews_userProvince",
+        "reviews_username",
+        "user_sentiment"
+      ]
+    }
+  ]
+}

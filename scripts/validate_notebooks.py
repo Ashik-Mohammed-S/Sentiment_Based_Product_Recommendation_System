@@ -1,11 +1,13 @@
 """Validate notebook syntax and dependency imports without executing datasets or training."""
 import ast
+import sys
 import importlib
 from pathlib import Path
 import nbformat
 from IPython.core.inputtransformer2 import TransformerManager
 
 root = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(root))
 transformer = TransformerManager()
 modules = set()
 from_imports = set()

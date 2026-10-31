@@ -1,3 +1,8 @@
 .venv/
 __pycache__/
 .ipynb_checkpoints/
+dataset/
+.cache/
+results/
+model_experiments/*.keras
+*.keras
