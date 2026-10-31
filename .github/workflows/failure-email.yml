@@ -1,0 +1,44 @@
+name: Email failures to Gmail
+
+on:
+  workflow_run:
+    workflows: ['Validate notebook environment', 'Review Compass health monitor']
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      test_delivery:
+        description: 'Send one test email to the configured alert recipient'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+jobs:
+  email:
+    if: >-
+      (github.event_name == 'workflow_dispatch' && inputs.test_delivery == true) ||
+      (github.event_name == 'workflow_run' &&
+       github.event.workflow_run.head_repository.full_name == github.repository &&
+       github.event.workflow_run.head_branch == 'main' &&
+       contains(fromJSON('["failure","timed_out","startup_failure","action_required"]'), github.event.workflow_run.conclusion))
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      # Always use trusted default-branch source; never execute the triggering
+      # workflow's commit or download its artifacts in this secrets-bearing job.
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-python@v7.1.0
+        with:
+          python-version-file: .python-version
+      - name: Send failure alert
+        env:
+          ALERT_GMAIL_USER: ${{ secrets.ALERT_GMAIL_USER }}
+          ALERT_GMAIL_APP_PASSWORD: ${{ secrets.ALERT_GMAIL_APP_PASSWORD }}
+          ALERT_EMAIL_TO: ${{ secrets.ALERT_EMAIL_TO }}
+          TEST_DELIVERY: ${{ github.event_name == 'workflow_dispatch' && inputs.test_delivery == true }}
+        run: python scripts/send_failure_email.py
