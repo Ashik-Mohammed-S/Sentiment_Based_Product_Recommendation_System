@@ -1,27 +1,64 @@
-# Live recommendation app
+# Review Compass — Sentiment and Product Recommendations
 
-[Open Review Compass](https://review-compass-ashik.swoonysnipe19.chatgpt.site) · [Run Flask / API](APP.md) · [Model evaluation](MODEL_CARD.md)
+[![Validation](https://github.com/Ashik-Mohammed-S/Sentiment_Based_Product_Recommendation_System/actions/workflows/validate.yml/badge.svg)](https://github.com/Ashik-Mohammed-S/Sentiment_Based_Product_Recommendation_System/actions/workflows/validate.yml)
 
-## Sentiment-Based Product Recommendation
+An independent recommendation project with **separate sentiment, ranking and rating evaluations**, a runnable Flask API and a browser inference app.
 
-### Problem Statement
-E-commerce has revolutionized the way we shop. Companies like Amazon, Flipkart, Myntra, Paytm, and Snapdeal have made it possible to order products from the comfort of our homes. Imagine you're a Machine Learning Engineer at an e-commerce company called 'Ebuss'. Ebuss has a diverse product range, including household essentials, books, personal care products, medicines, cosmetic items, beauty products, electrical appliances, kitchen and dining products, and health care products. To compete with market leaders like Amazon and Flipkart, Ebuss needs to leverage technology and grow rapidly in the e-commerce market.
+[Flask setup and API](APP.md) · [Model card](MODEL_CARD.md) · [Monitoring setup](MONITORING.md) · [Owner-private hosted preview](https://review-compass-ashik.swoonysnipe19.chatgpt.site)
 
-### Solution Approach
+![Tested local app preview](assets/app-preview.png)
 
-- **Data Preparation**: The dataset and attribute descriptions are available under the dataset folder. The data is cleaned, visualized, and preprocessed using Natural Language Processing (NLP).
+## Problem and data
 
-- **Text Vectorization**: The TF-IDF Vectorizer is used to vectorize the textual data (review_title+review_text). This measures the relative importance of a word with respect to other documents.
+Recommend unseen products from historical review signals while handling sparse histories and cold starts. The repository contains **30,000 source reviews covering 271 products**. Current claims refer to that stored dataset; they do not assert a one-million-review benchmark or production sales impact.
 
-- **Handling Class Imbalance**: The dataset suffers from a class imbalance issue. The Synthetic Minority Over-sampling Technique (SMOTE) is used for oversampling before applying the model.
+## What is implemented
 
-- **Machine Learning Models**: Various Machine Learning Classification Models are applied on the vectorized data and the target column (user_sentiment). These models include Logistic Regression, Naive Bayes, and Tree Algorithms (Decision Tree, Random Forest, XGBoost). The objective of these ML models is to classify the sentiment as positive(1) or negative(0). The best model is selected based on various ML classification metrics (Accuracy, Precision, Recall, F1 Score, AUC). XGBoost is selected as the best model based on these evaluation metrics.
+- **Sentiment:** normalized duplicate-review groups cannot cross the holdout. Training-only TF-IDF and class-balanced logistic regression; no pre-split vocabulary fitting or pre-CV SMOTE.
+- **Ranking:** compare popularity, smoothed positive-review fractions, EASE item co-occurrence and metadata similarity on an inner validation split. Selected ranking uses popularity, sentiment and EASE; metadata weight is zero.
+- **Rating:** regularized item means and user bias, with shrinkage selected on validation. This is distinct from the top-five ranking objective.
+- **Serving:** a JSON artifact with product metadata and aggregate parameters. No reviewer usernames, raw review bodies or user histories are shipped to the browser. Favorites stay in browser local storage.
+- **Operations:** Flask input validation, Python/browser scoring parity, CI, hourly repository-owned health checks and optional Gmail failure delivery. Gmail needs account or secret activation; workflow files alone do not prove email is active.
 
-- **Recommender System**: A Collaborative Filtering Recommender system is created based on User-user and Item-item approaches. The Root Mean Square Error (RMSE) evaluation metric is used for evaluation.
+## Held-out results
 
-- **Code**: The code for Sentiment Classification and Recommender Systems is available in the Main.ipynb Jupyter notebook.
+| Measure | Current model | Baseline |
+| --- | --- | --- |
+| Sentiment macro-F1 | 0.812 | Majority 0.469 |
+| Sentiment ROC-AUC | 0.958 | 0.500 |
+| Ranking NDCG@5 | 0.46965 | Popularity 0.45644 |
+| Ranking precision@5 | 0.11767 | Popularity 0.11615 |
+| Rating RMSE | 0.79820 | Global mean 0.93269 |
 
-- **Product Filtering**: The top 20 products are filtered using the recommender system. For each of these products, the user_sentiment is predicted for all the reviews. The Top 5 products with the highest Positive User Sentiment are then filtered out.
-## Current analysis and local datasets
+Ranking evaluates 4,866 users with held-out positive ratings, including 4,205 cold users. Unknown relevant items remain in denominators. Selection uses the inner training split; final test results are not used to choose weights. See [the reproducible report](evaluation/recommendation.json) for candidates and split details.
 
-See [ANALYSIS.md](ANALYSIS.md) for the target-aware workflow and [DATA.md](DATA.md) for the stored reference data. The primary notebook runs the full current analysis; earlier walkthroughs are preserved in historical/.
+The ranking improvement is modest; statistical significance was not established. Unobserved items are unjudged. A random pair split is an offline proxy, not evidence of online engagement lift. Sentiment classification is evaluated separately; ranking uses smoothed observed source sentiment labels rather than claiming online free-text sentiment inference.
+
+## Run the Flask app
+
+Use the Python version in `.python-version`:
+
+```sh
+python -m pip install -r requirements-web.txt
+waitress-serve --host=127.0.0.1 --port=8080 app:app
+```
+
+Open http://127.0.0.1:8080. Choose products, inspect changed recommendations and review the evaluation page. The hosted Sites edition performs browser inference; it does not host the Flask process. The owner-private preview may require access, so local setup is the reproducible review path.
+
+## Reproduce the analysis
+
+```sh
+python -m pip install -r requirements.txt -r requirements-web.txt
+python scripts/fetch_data.py
+python scripts/run_notebook.py --mode full
+python -m unittest discover -s tests
+python scripts/check_web.py
+```
+
+The parity check needs Node. Data is committed in `dataset/` and verified by checksum. [DATA.md](DATA.md) and [dataset-sources.json](dataset-sources.json) retain provenance and upstream terms. Earlier academic approaches and saved models are historical reference, not the current evaluation or serving path.
+
+## Limitations and reviewer guide
+
+No live prices, inventory, purchasing integration, A/B test or production deployment of Flask is claimed. Inspect [scripts/recommender.py](scripts/recommender.py), [serving.py](serving.py), the [model card](MODEL_CARD.md), and one cold-start case before drawing conclusions from aggregate metrics.
+
+[Portfolio index](https://github.com/Ashik-Mohammed-S/Ashik-Mohammed-S/blob/main/PORTFOLIO.md)
